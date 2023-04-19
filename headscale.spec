@@ -20,9 +20,14 @@ Summary:        An open source, self-hosted implementation of the Tailscale cont
 
 License:        BSD-3-Clause
 URL:            %{gourl}
-Source:         https://github.com/juanfont/headscale/archive/v%{version}/headscale-%{version}.tar.gz
+Source0:        https://github.com/juanfont/headscale/archive/v%{version}/headscale-%{version}.tar.gz
+Source1:        headscale.service
+Source2:        headscale.tmpfiles
+Source3:        headscale.sysuser.conf
+Source4:        config.yaml
 
 BuildRequires:  git-core
+BuildRequires:  systemd-rpm-macros
 %if 0%{?rhel}
 BuildRequires:  wget
 %endif
@@ -72,6 +77,12 @@ done
 %gopkginstall
 install -m 0755 -vd                     %{buildroot}%{_bindir}
 install -m 0755 -vp %{gobuilddir}/bin/* %{buildroot}%{_bindir}/
+install -p -D -m 0644 %{SOURCE2} %{buildroot}%{_tmpfilesdir}/%{name}.conf
+install -d -m 0755 %{buildroot}/run/%{name}/
+install -p -D -m 0644 %{SOURCE3} %{buildroot}%{_sysusersdir}/headscale.conf
+install -p -D -m 0644 %{SOURCE1} %{buildroot}%{_unitdir}/%{name}.service
+install -p -d -m 0755 %{buildroot}%{_sharedstatedir}/headscale/
+install -p -D -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/headscale/config.yaml
 
 
 %if %{with check}
@@ -80,10 +91,34 @@ install -m 0755 -vp %{gobuilddir}/bin/* %{buildroot}%{_bindir}/
 %endif
 
 
+%pre
+#/usr/sbin/useradd -g headscale -d /run/headscale -s /sbin/nologin \
+#  -c "headscale" >/dev/null 2>&1 || :
+%sysusers_create_compat %{SOURCE3}
+
+
+%post
+%systemd_post headscale.service
+
+
+%preun
+%systemd_preun headscale.service
+
+
+%postun
+%systemd_postun_with_restart headscale.service
+
+
 %files
 %license LICENSE
 %doc docs/ README.md CHANGELOG.md
 %{_bindir}/headscale
+%{_tmpfilesdir}/%{name}.conf
+%{_sysusersdir}/%{name}.conf
+%{_unitdir}/%{name}.service
+%{_sharedstatedir}/%{name}/
+%{_sysconfdir}/%{name}/
+%config(noreplace) %{_sysconfdir}/%{name}/config.yaml
 
 %gopkgfiles
 
