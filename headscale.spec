@@ -6,7 +6,12 @@
 # https://github.com/juanfont/headscale
 %global goipath         github.com/juanfont/headscale
 Version:                0.21.0
+
+%if 0%{?rhel}
+%gometa
+%else
 %gometa -f
+%endif
 
 
 %global common_description %{expand:
