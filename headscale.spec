@@ -50,26 +50,10 @@ rm -rf cmd/gh-action-integration-generator
 
 
 %build
-%if 0%{?rhel}
-    # need to look into this more
-    %undefine _missing_build_ids_terminate_build
-    mkdir %{_topdir}/go
-    pushd %{_topdir}/go
-    wget https://go.dev/dl/go1.19.8.linux-amd64.tar.gz
-    tar -xf go1.19.8.linux-amd64.tar.gz
-    popd
-    export GOROOT=%{_topdir}/go/go
-    export PATH="${GOROOT}/bin:${PATH}"
-%endif
-
 export GOFLAGS=-modcacherw
 
 for cmd in cmd/* ; do
-  %if 0%{?rhel}
-    go build -v -o %{gobuilddir}/bin/$(basename $cmd) %{goipath}/$cmd
-  %else
-    %gobuild -o %{gobuilddir}/bin/$(basename $cmd) %{goipath}/$cmd
-  %endif
+  %gobuild -o %{gobuilddir}/bin/$(basename $cmd) %{goipath}/$cmd
 done
 
 
