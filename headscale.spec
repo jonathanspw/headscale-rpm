@@ -28,7 +28,7 @@ URL:            %{gourl}
 Source0:        https://github.com/juanfont/headscale/archive/v%{version}/headscale-%{version}.tar.gz
 Source1:        headscale.service
 Source2:        headscale.tmpfiles
-Source3:        headscale.sysuser.conf
+Source3:        headscale.sysusers
 Source4:        config.yaml
 
 BuildRequires:  git-core
@@ -68,7 +68,7 @@ install -m 0755 -vd                     %{buildroot}%{_bindir}
 install -m 0755 -vp %{gobuilddir}/bin/* %{buildroot}%{_bindir}/
 install -p -D -m 0644 %{SOURCE2} %{buildroot}%{_tmpfilesdir}/%{name}.conf
 install -d -m 0755 %{buildroot}/run/%{name}/
-install -p -D -m 0644 %{SOURCE3} %{buildroot}%{_sysusersdir}/headscale.conf
+install -p -D -m 0644 %{SOURCE3} %{buildroot}%{_sysusersdir}/headscale.sysusers
 install -p -D -m 0644 %{SOURCE1} %{buildroot}%{_unitdir}/%{name}.service
 install -p -d -m 0755 %{buildroot}%{_sharedstatedir}/headscale/
 install -p -D -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/headscale/config.yaml
@@ -81,8 +81,6 @@ install -p -D -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/headscale/config.yam
 
 
 %pre
-#/usr/sbin/useradd -g headscale -d /run/headscale -s /sbin/nologin \
-#  -c "headscale" >/dev/null 2>&1 || :
 %sysusers_create_compat %{SOURCE3}
 
 
@@ -103,11 +101,11 @@ install -p -D -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/headscale/config.yam
 %doc docs/ README.md CHANGELOG.md
 %{_bindir}/headscale
 %{_tmpfilesdir}/%{name}.conf
-%{_sysusersdir}/%{name}.conf
+%{_sysusersdir}/%{name}.sysusers
 %{_unitdir}/%{name}.service
-%{_sharedstatedir}/%{name}/
-%{_sysconfdir}/%{name}/
-%config(noreplace) %{_sysconfdir}/%{name}/config.yaml
+%dir %attr(0755,headscale,headscale) %{_sharedstatedir}/%{name}/
+%attr(0755,headscale,headscale) %{_sysconfdir}/%{name}/
+%attr(0644,headscale,headscale) %config(noreplace) %{_sysconfdir}/%{name}/config.yaml
 
 %gopkgfiles
 
