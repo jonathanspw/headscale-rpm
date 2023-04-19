@@ -57,6 +57,8 @@ rm -rf cmd/gh-action-integration-generator
     export PATH="${GOROOT}/bin:${PATH}"
 %endif
 
+export GOFLAGS=-modcacherw
+
 for cmd in cmd/* ; do
   %if 0%{?rhel}
     go build -v -o %{gobuilddir}/bin/$(basename $cmd) %{goipath}/$cmd
