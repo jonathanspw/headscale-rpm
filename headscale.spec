@@ -20,7 +20,7 @@ An open source, self-hosted implementation of the Tailscale control server.}
 %global golicenses      LICENSE
 
 Name:           headscale
-Release:        1
+Release:        2
 Summary:        An open source, self-hosted implementation of the Tailscale control server
 
 License:        BSD-3-Clause
@@ -31,11 +31,11 @@ Source2:        headscale.tmpfiles
 Source3:        headscale.sysusers
 Source4:        config.yaml
 
+# https://github.com/juanfont/headscale/pull/1287
+Patch:          1287.patch
+
 BuildRequires:  git-core
 BuildRequires:  systemd-rpm-macros
-%if 0%{?rhel}
-BuildRequires:  wget
-%endif
 
 %description %{common_description}
 
@@ -111,5 +111,8 @@ install -p -D -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/headscale/config.yam
 
 
 %changelog
+* Wed Apr 19 2023 Jonathan Wright <jonathan@almalinux.org> - 0.21.0-2
+- add preferred_username field patch
+
 * Wed Apr 19 2023 Jonathan Wright <jonathan@almalinux.org> - 0.21.0-1
 - Initial package build
