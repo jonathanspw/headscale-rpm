@@ -23,6 +23,9 @@ URL:            %{gourl}
 Source:         https://github.com/juanfont/headscale/archive/v%{version}/headscale-%{version}.tar.gz
 
 BuildRequires:  git-core
+%if 0%{?rhel}
+BuildRequires:  wget
+%endif
 
 %description %{common_description}
 
@@ -34,13 +37,32 @@ BuildRequires:  git-core
 %goprep
 %autopatch -p1
 
+# we don't need to build this
+rm -rf cmd/gh-action-integration-generator
+
 #%%generate_buildrequires
 #%%go_generate_buildrequires
 
 
 %build
+%if 0%{?rhel}
+    # need to look into this more
+    %undefine _missing_build_ids_terminate_build
+    mkdir %{_topdir}/go
+    pushd %{_topdir}/go
+    wget https://go.dev/dl/go1.19.8.linux-amd64.tar.gz
+    tar -xf go1.19.8.linux-amd64.tar.gz
+    popd
+    export GOROOT=%{_topdir}/go/go
+    export PATH="${GOROOT}/bin:${PATH}"
+%endif
+
 for cmd in cmd/* ; do
-  %gobuild -o %{gobuilddir}/bin/$(basename $cmd) %{goipath}/$cmd
+  %if 0%{?rhel}
+    go build -v -o %{gobuilddir}/bin/$(basename $cmd) %{goipath}/$cmd
+  %else
+    %gobuild -o %{gobuilddir}/bin/$(basename $cmd) %{goipath}/$cmd
+  %endif
 done
 
 
@@ -60,7 +82,6 @@ install -m 0755 -vp %{gobuilddir}/bin/* %{buildroot}%{_bindir}/
 %license LICENSE
 %doc docs/ README.md CHANGELOG.md
 %{_bindir}/headscale
-%exclude %{_bindir}/gh-action-integration-generator
 
 %gopkgfiles
 
