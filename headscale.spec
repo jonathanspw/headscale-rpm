@@ -8,7 +8,7 @@
 
 # https://github.com/juanfont/headscale
 %global goipath         github.com/juanfont/headscale
-Version:                0.22.0
+Version:                0.22.1
 
 %if 0%{?rhel}
 %gometa
@@ -116,6 +116,9 @@ install -p -D -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/headscale/config.yam
 
 
 %changelog
+* Thu Apr 20 2023 Jonathan Wright <jonathan@almalinux.org> - 0.22.1-1
+- Update to 0.22.1
+
 * Thu Apr 20 2023 Jonathan Wright <jonathan@almalinux.org> - 0.22.0-1
 - Update to 0.22.0
 - Use vendored source tarball
