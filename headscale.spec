@@ -20,7 +20,7 @@ An open source, self-hosted implementation of the Tailscale control server.}
 %global golicenses      LICENSE
 
 Name:           headscale
-Release:        2
+Release:        3
 Summary:        An open source, self-hosted implementation of the Tailscale control server
 
 License:        BSD-3-Clause
@@ -111,6 +111,9 @@ install -p -D -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/headscale/config.yam
 
 
 %changelog
+* Wed Apr 19 2023 Jonathan Wright <jonathan@almalinux.org> - 0.21.0-3
+- allow binding of privileged ports
+
 * Wed Apr 19 2023 Jonathan Wright <jonathan@almalinux.org> - 0.21.0-2
 - add preferred_username field patch
 
