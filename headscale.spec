@@ -8,7 +8,7 @@
 
 # https://github.com/juanfont/headscale
 %global goipath         github.com/juanfont/headscale
-Version:                0.22.1
+Version:                0.22.3
 
 %if 0%{?rhel}
 %gometa
@@ -22,7 +22,7 @@ An open source, self-hosted implementation of the Tailscale control server.}
 %global golicenses      LICENSE
 
 Name:           headscale
-Release:        2
+Release:        1
 Summary:        An open source, self-hosted implementation of the Tailscale control server
 
 License:        BSD-3-Clause
@@ -40,8 +40,6 @@ Source4:        config.yaml
 
 # https://github.com/juanfont/headscale/pull/1287
 #Patch:          1287.patch
-# https://github.com/juanfont/headscale/pull/1377
-Patch:          1377.patch
 
 BuildRequires:  git-core
 BuildRequires:  systemd-rpm-macros
@@ -118,6 +116,9 @@ install -p -D -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/headscale/config.yam
 
 
 %changelog
+* Fri May 12 2023 Jonathan Wright <jonathan@almalinux.org> - 0.22.3-1
+- Update to 0.22.3
+
 * Tue Apr 25 2023 Jonathan Wright <jonathan@almalinux.org> - 0.22.1-2
 - Add patch to fix high CPU usage from ACLs
 
