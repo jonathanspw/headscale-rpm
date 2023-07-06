@@ -45,6 +45,8 @@ BuildRequires:  git-core
 BuildRequires:  systemd-rpm-macros
 BuildRequires:  tar
 
+Requires: systemd
+
 %description %{common_description}
 
 
