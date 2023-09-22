@@ -8,8 +8,8 @@
 
 # https://github.com/juanfont/headscale
 %global goipath         github.com/juanfont/headscale
-%global commit          fb203a2e454a9907d017ed3c61c7002ed3065977
-%global gitdate		20230724
+%global commit          096ac31bb3c9e6aa041975ce1695f364db22509d
+%global gitdate		20230919
 %global srcurl  	https://github.com/juanfont/headscale
 
 %if 0%{?rhel}
@@ -41,9 +41,6 @@ Source2:        headscale.tmpfiles
 Source3:        headscale.sysusers
 Source4:        config.yaml
 
-# https://github.com/juanfont/headscale/pull/1480
-Patch:          1480.patch
-
 BuildRequires:  git-core
 BuildRequires:  systemd-rpm-macros
 BuildRequires:  tar
@@ -61,7 +58,6 @@ Requires: systemd
 %prep
 %setup -n %{name}-%{commit}
 %goprep %{?with_vendor:-k}
-%autopatch -p1
 
 
 %build
@@ -122,6 +118,10 @@ install -p -D -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/headscale/config.yam
 
 
 %changelog
+* Fri Sep 22 2023 Ajay Ramaswamy <ajay@ramaswamy.net>
+- update to 096ac31bb3
+- drop patch from pr 1480, fixed upstream
+
 * Tue Aug 08 2023 Ajay Ramaswamy <ajay@ramaswamy.net>
 - try commit fb203a2e454
 - add patch from pr 1480
