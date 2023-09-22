@@ -7,7 +7,7 @@ if [[ -z ${version} ]]; then
     exit 1
 fi
 
-git clone --branch v${version} --depth 1 https://github.com/juanfont/headscale.git headscale-${version}
+git clone --branch main --depth 1 https://github.com/juanfont/headscale.git headscale-${version}
 pushd headscale-${version}
 go mod vendor
 popd

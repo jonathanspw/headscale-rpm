@@ -8,7 +8,9 @@
 
 # https://github.com/juanfont/headscale
 %global goipath         github.com/juanfont/headscale
-Version:                0.22.3
+%global commit          096ac31bb3c9e6aa041975ce1695f364db22509d
+%global gitdate		20230919
+%global srcurl  	https://github.com/juanfont/headscale
 
 %if 0%{?rhel}
 %gometa
@@ -22,14 +24,15 @@ An open source, self-hosted implementation of the Tailscale control server.}
 %global golicenses      LICENSE
 
 Name:           headscale
-Release:        2
+Version:        0.22.3
+Release:        0.%{gitdate}%{?dist}
 Summary:        An open source, self-hosted implementation of the Tailscale control server
 
 License:        BSD-3-Clause
 URL:            %{gourl}
 %if %{with vendor}
 # see create-vendor-tarball.sh in this distgit repo
-Source0:        headscale-%{version}-vendored.tar.xz
+Source0:        headscale-%{commit}-vendored.tar.xz
 %else
 Source0:        %{gosource}
 %endif
@@ -37,9 +40,6 @@ Source1:        headscale.service
 Source2:        headscale.tmpfiles
 Source3:        headscale.sysusers
 Source4:        config.yaml
-
-# https://github.com/juanfont/headscale/pull/1287
-#Patch:          1287.patch
 
 BuildRequires:  git-core
 BuildRequires:  systemd-rpm-macros
@@ -56,8 +56,8 @@ Requires: systemd
 
 
 %prep
+%setup -n %{name}-%{commit}
 %goprep %{?with_vendor:-k}
-%autopatch -p1
 
 
 %build
@@ -118,7 +118,15 @@ install -p -D -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/headscale/config.yam
 
 
 %changelog
-* Fri Jun 07 2023 Dusty Mabe <dusty@dustymabe.com> - 0.22.3-2
+* Fri Sep 22 2023 Ajay Ramaswamy <ajay@ramaswamy.net>
+- update to 096ac31bb3
+- drop patch from pr 1480, fixed upstream
+
+* Tue Aug 08 2023 Ajay Ramaswamy <ajay@ramaswamy.net>
+- try commit fb203a2e454
+- add patch from pr 1480
+
+* Wed Jun 07 2023 Dusty Mabe <dusty@dustymabe.com> - 0.22.3-2
 - Add Requires on systemd
 
 * Fri May 12 2023 Jonathan Wright <jonathan@almalinux.org> - 0.22.3-1
