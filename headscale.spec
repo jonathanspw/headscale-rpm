@@ -22,7 +22,7 @@ An open source, self-hosted implementation of the Tailscale control server.}
 %global golicenses      LICENSE
 
 Name:           headscale
-Release:        2
+Release:        3
 Summary:        An open source, self-hosted implementation of the Tailscale control server
 
 License:        BSD-3-Clause
@@ -118,6 +118,9 @@ install -p -D -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/headscale/config.yam
 
 
 %changelog
+* Mon Jan 22 2024 Jonathan Wright <jonathan@almalinux.org> - 0.22.3-3
+- Update systemd unit to After=network-online.target
+
 * Fri Jun 07 2023 Dusty Mabe <dusty@dustymabe.com> - 0.22.3-2
 - Add Requires on systemd
 

@@ -1,6 +1,6 @@
 [Unit]
 After=syslog.target
-After=network.target
+After=network-online.target
 Description=headscale coordination server for Tailscale
 
 [Service]
@@ -19,4 +19,3 @@ AmbientCapabilities=CAP_NET_BIND_SERVICE
 
 [Install]
 WantedBy=multi-user.target
-
