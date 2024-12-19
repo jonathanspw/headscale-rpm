@@ -8,7 +8,7 @@
 
 # https://github.com/juanfont/headscale
 %global goipath         github.com/juanfont/headscale
-Version:                0.22.3
+Version:                0.23.0
 
 %if 0%{?rhel}
 %gometa
@@ -22,7 +22,7 @@ An open source, self-hosted implementation of the Tailscale control server.}
 %global golicenses      LICENSE
 
 Name:           headscale
-Release:        3
+Release:        1%{?dist}
 Summary:        An open source, self-hosted implementation of the Tailscale control server
 
 License:        BSD-3-Clause
@@ -38,8 +38,6 @@ Source2:        headscale.tmpfiles
 Source3:        headscale.sysusers
 Source4:        config.yaml
 
-# https://github.com/juanfont/headscale/pull/1287
-#Patch:          1287.patch
 
 BuildRequires:  git-core
 BuildRequires:  systemd-rpm-macros
@@ -57,7 +55,7 @@ Requires: systemd
 
 %prep
 %goprep %{?with_vendor:-k}
-%autopatch -p1
+#%%autopatch -p1
 
 
 %build
@@ -118,6 +116,9 @@ install -p -D -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/headscale/config.yam
 
 
 %changelog
+* Thu Dec 19 2024 jonathanspw <8390543+jonathanspw@users.noreply.github.com> - 0.23.0-1
+- update to 0.23.0
+
 * Mon Jan 22 2024 Jonathan Wright <jonathan@almalinux.org> - 0.22.3-3
 - Update systemd unit to After=network-online.target
 
