@@ -125,7 +125,7 @@ install -p -D -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/headscale/config.yam
 * Mon Jan 22 2024 Jonathan Wright <jonathan@almalinux.org> - 0.22.3-3
 - Update systemd unit to After=network-online.target
 
-* Fri Jun 07 2023 Dusty Mabe <dusty@dustymabe.com> - 0.22.3-2
+* Fri Jul 07 2023 Dusty Mabe <dusty@dustymabe.com> - 0.22.3-2
 - Add Requires on systemd
 
 * Fri May 12 2023 Jonathan Wright <jonathan@almalinux.org> - 0.22.3-1
