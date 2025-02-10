@@ -8,7 +8,7 @@
 An open source, self-hosted implementation of the Tailscale control server.}
 
 Name:           headscale
-Version:        0.24.0~BETA2
+Version:        0.24.3
 Release:        1%{?dist}
 Summary:        An open source, self-hosted implementation of the Tailscale control server
 
@@ -446,7 +446,7 @@ Provides:       bundled(golang(gvisor.dev/gvisor)) = v0.0.0~20240722211153~64c01
 
 
 %prep
-%autosetup -p1 -n %{name}-0.24.0-beta.2
+%autosetup -p1 -n %{name}-0.24.3
 # this is the same as %%goprep
 mkdir -p src/$(dirname %{goipath})
 ln -s $PWD src/%{goipath}
@@ -496,6 +496,9 @@ install -p -D -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/headscale/config.yam
 
 
 %changelog
+* Mon Feb 10 2025 Jonathan Wright <jonathan@almalinux.org> - 0.24.3-1
+- update to 0.24.3
+
 * Thu Dec 19 2024 Jonathan Wright <jonathan@almalinux.org> - 0.24.0~BETA2-1
 - update to 0.24.0-beta.2
 - update spec: remove almost all golang macros
