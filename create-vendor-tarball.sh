@@ -70,15 +70,32 @@ if $do_license; then
 	        VERSION=$(echo -n $dep | awk -F ';' '{ printf "%s", $2 }')
 	        VERSION_SPEC=$(echo $VERSION | sed 's/-/~/g')
 	        CURL_OUT=$(curl -s https://api.deps.dev/v3/systems/go/packages/$GO_MOD_PATH_URLENCODE/versions/$VERSION)
-	        LICENSES=$(echo -n $CURL_OUT | jq -r '.licenses | join(" OR ")')
+	        LICENSES=$(echo -n $CURL_OUT | jq -r '.licenses | join(" OR ")' 2> /dev/null)
 	        if [ ! -z "$LICENSES" ]; then
 	                if echo "$LICENSES" | grep -q " OR "; then
 	                        LICENSE_ASSOC_ARR["($LICENSES)"]=1
 	                else
 	                        LICENSE_ASSOC_ARR["$LICENSES"]=1
 	                fi
-	        fi
-	        echo "# $LICENSES"
+	        else
+		# if we couldn't match a license on the exact version, try the default version
+			CURL_OUT=$(curl -s https://api.deps.dev/v3/systems/go/packages/$GO_MOD_PATH_URLENCODE)
+			DEFAULT_VERSION=$(echo -n $CURL_OUT | jq -r '.versions.[] | select(.isDefault==true) | .versionKey.version' 2> /dev/null)
+			CURL_OUT=$(curl -s https://api.deps.dev/v3/systems/go/packages/$GO_MOD_PATH_URLENCODE/versions/$DEFAULT_VERSION)
+		        LICENSES_2ND=$(echo -n $CURL_OUT | jq -r '.licenses | join(" OR ")' 2> /dev/null)
+		        if [ ! -z "$LICENSES_2ND" ]; then
+		                if echo "$LICENSES_2ND" | grep -q " OR "; then
+	        	                LICENSE_ASSOC_ARR["($LICENSES_2ND)"]=1
+	               		else
+	                        	LICENSE_ASSOC_ARR["$LICENSES_2ND"]=1
+	                	fi
+	        	fi
+		fi
+	        if [ ! -z "$LICENSES" ]; then
+			echo "# $LICENSES"
+		else
+			echo "# $LICENSES_2ND"
+		fi
 	        echo "Provides:       bundled(golang($GO_MOD_PATH)) = $VERSION_SPEC"
 	done
 
@@ -96,5 +113,6 @@ if $do_license; then
 fi
 
 popd
-XZ_OPT='-e -9 -T0' tar --exclude .git -cJf headscale-${version}-vendored.tar.xz headscale-${version}
+#XZ_OPT='-e -9 -T0' tar --exclude .git -cJf headscale-${version}-vendored.tar.xz headscale-${version}
+tar -I "zstd -T0 --ultra -22" --exclude .git -cf headscale-${version}-vendored.tar.zst headscale-${version}
 rm -rf headscale-${version}
