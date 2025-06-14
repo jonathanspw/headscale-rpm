@@ -490,12 +490,13 @@ install -p -D -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/headscale/config.yam
 %{_unitdir}/%{name}.service
 %dir %attr(0755,headscale,headscale) %{_sharedstatedir}/%{name}/
 %attr(0755,headscale,headscale) %{_sysconfdir}/%{name}/
-%attr(0644,headscale,headscale) %config(noreplace) %{_sysconfdir}/%{name}/config.yaml
+%attr(0600,headscale,headscale) %config(noreplace) %{_sysconfdir}/%{name}/config.yaml
 
 
 %changelog
 * Sat Jun 14 2025 Jonathan Wright <jonathan@almalinux.org> - 0.26.1-2
 - Fix user/group creation on f42+
+- Lock down config file (0600)
 
 * Thu Jun 12 2025 Jonathan Wright <jonathan@almalinux.org> - 0.26.1-1
 - update to 0.26.1
