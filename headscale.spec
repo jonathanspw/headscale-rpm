@@ -10,7 +10,7 @@ An open source, self-hosted implementation of the Tailscale control server.}
 
 Name:           headscale
 Version:        0.26.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Self-hosted implementation of the Tailscale control server
 
 License:        BSD-2-Clause AND MIT AND Apache-2.0 AND MPL-2.0 AND BSD-2-Clause-Views AND ISC AND BSD-3-Clause AND ISC
@@ -449,6 +449,7 @@ ln -s $PWD src/%{goipath}
 
 
 %build
+export LDFLAGS="-X %{goipath}/hscontrol/types.Version=v%{version}"
 %gobuild -o bin/%{name} %{goipath}/cmd/%{name}
 
 
@@ -461,6 +462,11 @@ install -p -D -m 0644 %{SOURCE3} %{buildroot}%{_sysusersdir}/headscale.sysusers.
 install -p -D -m 0644 %{SOURCE1} %{buildroot}%{_unitdir}/%{name}.service
 install -p -d -m 0755 %{buildroot}%{_sharedstatedir}/headscale/
 install -p -D -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/headscale/config.yaml
+
+
+%check
+# ensure that the version was embedded correctly
+[[ "$(./bin/headscale version)" == "v%{version}" ]] || exit 1
 
 
 %if 0%{?rhel}
@@ -494,6 +500,9 @@ install -p -D -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/headscale/config.yam
 
 
 %changelog
+* Sat Jun 14 2025 Jonathan Wright <jonathan@almalinux.org> - 0.26.1-3
+- Set embedded version
+
 * Sat Jun 14 2025 Jonathan Wright <jonathan@almalinux.org> - 0.26.1-2
 - Fix user/group creation on f42+
 - Lock down config file (0600)
