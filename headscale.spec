@@ -489,7 +489,7 @@ install -p -D -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/headscale/config.yam
 %{_sysusersdir}/%{name}.sysusers.conf
 %{_unitdir}/%{name}.service
 %dir %attr(0755,headscale,headscale) %{_sharedstatedir}/%{name}/
-%attr(0755,headscale,headscale) %{_sysconfdir}/%{name}/
+%dir %attr(0755,headscale,headscale) %{_sysconfdir}/%{name}/
 %attr(0600,headscale,headscale) %config(noreplace) %{_sysconfdir}/%{name}/config.yaml
 
 
