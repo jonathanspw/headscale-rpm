@@ -11,7 +11,7 @@ An open source, self-hosted implementation of the Tailscale control server.}
 Name:           headscale
 Version:        0.26.1
 Release:        2%{?dist}
-Summary:        An open source, self-hosted implementation of the Tailscale control server
+Summary:        Self-hosted implementation of the Tailscale control server
 
 License:        BSD-2-Clause AND MIT AND Apache-2.0 AND MPL-2.0 AND BSD-2-Clause-Views AND ISC AND BSD-3-Clause AND ISC
 URL:            https://github.com/juanfont/headscale
