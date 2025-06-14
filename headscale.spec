@@ -1,3 +1,4 @@
+
 # https://github.com/juanfont/headscale
 %global goipath github.com/juanfont/headscale
 
@@ -9,7 +10,7 @@ An open source, self-hosted implementation of the Tailscale control server.}
 
 Name:           headscale
 Version:        0.26.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        An open source, self-hosted implementation of the Tailscale control server
 
 License:        BSD-2-Clause AND MIT AND Apache-2.0 AND MPL-2.0 AND BSD-2-Clause-Views AND ISC AND BSD-3-Clause AND ISC
@@ -18,7 +19,7 @@ URL:            https://github.com/juanfont/headscale
 Source0:        headscale-%{version}-vendored.tar.zst
 Source1:        headscale.service
 Source2:        headscale.tmpfiles
-Source3:        headscale.sysusers
+Source3:        headscale.sysusers.conf
 Source4:        config.yaml
 
 %if %{defined el8}
@@ -456,14 +457,16 @@ install -m 0755 -vd                     %{buildroot}%{_bindir}
 install -m 0755 -vp bin/* %{buildroot}%{_bindir}/
 install -p -D -m 0644 %{SOURCE2} %{buildroot}%{_tmpfilesdir}/%{name}.conf
 install -d -m 0755 %{buildroot}/run/%{name}/
-install -p -D -m 0644 %{SOURCE3} %{buildroot}%{_sysusersdir}/headscale.sysusers
+install -p -D -m 0644 %{SOURCE3} %{buildroot}%{_sysusersdir}/headscale.sysusers.conf
 install -p -D -m 0644 %{SOURCE1} %{buildroot}%{_unitdir}/%{name}.service
 install -p -d -m 0755 %{buildroot}%{_sharedstatedir}/headscale/
 install -p -D -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/headscale/config.yaml
 
 
+%if 0%{?rhel}
 %pre
 %sysusers_create_compat %{SOURCE3}
+%endif
 
 
 %post
@@ -483,7 +486,7 @@ install -p -D -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/headscale/config.yam
 %doc docs/ README.md CHANGELOG.md
 %{_bindir}/headscale
 %{_tmpfilesdir}/%{name}.conf
-%{_sysusersdir}/%{name}.sysusers
+%{_sysusersdir}/%{name}.sysusers.conf
 %{_unitdir}/%{name}.service
 %dir %attr(0755,headscale,headscale) %{_sharedstatedir}/%{name}/
 %attr(0755,headscale,headscale) %{_sysconfdir}/%{name}/
@@ -491,6 +494,9 @@ install -p -D -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/headscale/config.yam
 
 
 %changelog
+* Sat Jun 14 2025 Jonathan Wright <jonathan@almalinux.org> - 0.26.1-2
+- Fix user/group creation on f42+
+
 * Thu Jun 12 2025 Jonathan Wright <jonathan@almalinux.org> - 0.26.1-1
 - update to 0.26.1
 - use zst for source tarball
