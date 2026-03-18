@@ -125,7 +125,7 @@ derp:
   auto_update_enabled: true
 
   # How often should we check for DERP updates?
-  update_frequency: 24h
+  update_frequency: 3h
 
 # Disables the automatic check for headscale updates on startup
 disable_check_updates: false
@@ -348,6 +348,13 @@ unix_socket_permission: "0770"
 #   # parameters to the Authorize Endpoint request. Scopes default to "openid", "profile" and "email".
 #
 #   scope: ["openid", "profile", "email", "custom"]
+#
+#   # Only verified email addresses are synchronized to the user profile by
+#   # default. Unverified emails may be allowed in case an identity provider
+#   # does not send the "email_verified: true" claim or email verification is
+#   # not required.
+#   email_verified_required: true
+#
 #   extra_params:
 #     domain_hint: example.com
 #
